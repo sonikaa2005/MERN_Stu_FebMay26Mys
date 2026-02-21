@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Layouts: Auto-fit and Auto-fill</title>
+    <style>
+        .grid-fr {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Auto-fit with minimum 150px width */
+           /* gap: 10px; /* Optional: add space between grid items */   
+           column-gap: 10px; /* Optional: add horizontal gap between grid items */
+           row-gap: 10px; /* Optional: add vertical gap between grid items */
+            margin: 10px; /* Optional: add margin around the grid container */
+        }
+        .item {
+            background-color: aquamarine;
+            color: black;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+     <!-- Auto-fit & Auto-fill -->
+     <div class="grid-fr"> <!-- Define the grid container -->
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+    </div>
+    <div class="grid-fr"> <!-- Define the grid container -->
+        <div class="item">4</div>
+        <div class="item">5</div>
+        <div class="item">6</div>
+    </div>
+</body>
+</html>
