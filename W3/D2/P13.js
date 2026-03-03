@@ -9,9 +9,9 @@ function scope(){
 }
 scope();
 
-console.log(insideVar); //function scoped
-    console.log(insideLet); // block scoped
-    console.log(insideConst); // block scoped
+//console.log(insideVar); //function scoped
+    //console.log(insideLet); // block scoped
+    //console.log(insideConst); // block scoped
 
 
 function varFunctionScoped(){
