@@ -22,7 +22,7 @@ run.addEventListener("click",function(){
     }
     // Query selector:returns the first element
 //matching a css selector
- const mainFirstHeading = document.querySelector(".mainHeading"); //.=id, #=class
+ const mainFirstHeading = document.querySelector(".mainHeading"); //.=class, #=id
  mainFirstHeading.style.color = "red";
 });
 
