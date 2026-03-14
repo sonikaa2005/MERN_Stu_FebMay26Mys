@@ -1,0 +1,60 @@
+<!--Multi-Section Feedback Analyzer-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feedback Analyzer</title>
+<style>
+.card{
+border:1px solid gainsboro;
+padding:10px;
+margin:10px 0;
+border-radius:5px;
+}
+
+.label{
+font-weight:bold;
+color:blue;
+}
+
+#error{
+color:red;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Feedback Form</h2>
+
+<input id="name" placeholder="Enter Name"><br><br>
+
+<input id="email" placeholder="Enter Email"><br><br>
+
+<select id="type">
+<option value="">Select Feedback Type</option>
+<option value="Bug">Bug</option>
+<option value="Suggestion">Suggestion</option>
+<option value="Appreciation">Appreciation</option>
+</select>
+
+<br><br>
+
+<textarea id="feedback" placeholder="Enter Feedback"></textarea>
+
+<br><br>
+
+<button id="submitBtn">Submit</button>
+
+<p id="error"></p>
+
+<h3>Total Feedback: <span id="count">0</span></h3>
+
+<div id="container"></div>
+
+<script src="feedback.js"></script>
+
+</body>
+</html>
