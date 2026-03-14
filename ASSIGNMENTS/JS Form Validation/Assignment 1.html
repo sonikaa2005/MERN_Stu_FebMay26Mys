@@ -1,0 +1,60 @@
+<!-- FAQ Builder with Dynamic Section-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ Builder</title>
+<style>
+body{font-family:Arial}
+
+.faq{
+border:1px solid gray;
+padding:10px;
+margin:10px 0;
+border-radius:6px;
+}
+
+.badge{
+background:red;
+color:white;
+padding:3px 6px;
+font-size:12px;
+margin-left:10px;
+border-radius:4px;
+}
+
+button{
+margin-top:8px;
+cursor:pointer;
+}
+
+#error{
+color:red;
+}
+</style>
+</head>
+
+<body>
+
+<h2>FAQ Manager</h2>
+
+<input id="question" placeholder="Enter question"><br><br>
+
+<textarea id="answer" placeholder="Enter answer"></textarea><br><br>
+
+<button id="addBtn">Add FAQ</button>
+
+<p id="error"></p>
+
+<h3>FAQs</h3>
+
+<div id="faqContainer">
+<p id="emptyMsg">No FAQs available</p>
+</div>
+
+<script src="FAQ.js"></script>
+
+</body>
+</html>
