@@ -38,7 +38,7 @@ function renderSkills(){
         card.appendChild(skillName);
         card.appendChild(skillDescription);
         
-        //Apped card to skills container
+        // Apped card to skills container
         skillsContainer.appendChild(card);
     });
     console.log("skills rendered successfully");
