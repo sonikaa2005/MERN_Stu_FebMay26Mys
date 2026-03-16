@@ -6,4 +6,4 @@ const items = {
 
 for(const [item,itemName] of Object.entries(items)){
     console.log(`${item}:${itemName}`);
-}
+ }
