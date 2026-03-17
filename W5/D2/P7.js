@@ -31,4 +31,5 @@ loadUser(function(){
             loadShipment();
         });
     });
-});
+}
+);
