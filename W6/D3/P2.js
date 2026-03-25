@@ -16,8 +16,7 @@ fs.appendFileSync(filePath, "New text added using fs.appendFile.",function(error
         return;
       }
       console.log("File content appended");
-    }
-);
+    });
 console.log("File written synchronosly.");
 
 const content = fs.readFileSync(filePath,"utf-8");
