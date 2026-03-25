@@ -3,8 +3,11 @@
 const fs = require("fs");
 const fsPromises = require("fs/promises");
 
+//callback
 console.log("Type of fs.readFile: ",typeof fs.readFile);
 console.log("Type of fs.writeFile: ",typeof fs.readFile);
 
+
+//fs/promises
 console.log("Type of fsPromises.readFile: ",typeof fs.readFile);
 console.log("Type of fsPromises.writeFile: ",typeof fs.readFile);
