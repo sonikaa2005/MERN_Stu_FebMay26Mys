@@ -13,7 +13,7 @@ function renderSkills(){
 
         //create icon
         const iconBox = document.createElement("div");
-        iconBox.className = "w-20 h-20 mx-auto mb-4 bg-green-900 rounded-2xl flex item-center justify-center";
+        iconBox.className = "w-20 h-20 mx-auto mb-4 bg-indigo-300 rounded-2xl flex item-center justify-center";
 
         //create icon text 
         const iconText = document.createElement("span");
