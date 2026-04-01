@@ -22,10 +22,13 @@ console.log("Payload section:",tokenParts[1]);
 console.log("Signature section:",tokenParts[2]);
 console.log("JWT part count:",tokenParts.length);
 
+const newSecretKey = "donkey123";
 try{
     //verification of token
     //jwt.verify() checks trust, signature and expiration of the tokens
+   // const verifiedPayload = jwt.verify(token, newSecretKey);
     const verifiedPayload = jwt.verify(token, secretKey);
+
     console.log("Verified payload: ",verifiedPayload);
 }
 catch(error){
