@@ -1,27 +1,13 @@
-
 const skillsData = [
-  {
-    id: 1,
-    name: "ReactJS",
-    shortLabel: "R",
-    description: "Advanced Hooks, component-based UI, and state management."
-  },
-  {
-    id: 2,
-    name: "Tailwind CSS",
-    shortLabel: "T",
-    description: "Responsive layouts, utility-first styling, and clean UI building."
-  },
-  {
-    id: 3,
-    name: "JavaScript",
-    shortLabel: "J",
-    description: "DOM manipulation, events, validation, Fetch API, and storage."
-  },
-  {
-    id: 4,
-    name: "MongoDB",
-    shortLabel: "M",
-    description: "Document-based database design and backend integration."
-  }
+  { name: "ReactJS", category: "Frontend" },
+  { name: "Tailwind CSS", category: "Frontend" },
+  { name: "JavaScript", category: "Frontend" },
+
+  { name: "Node.js", category: "Backend" },
+  { name: "Express", category: "Backend" },
+  { name: "MongoDB", category: "Backend" },
+
+  { name: "Git", category: "Tools" },
+  { name: "GitHub", category: "Tools" },
+  { name: "VS Code", category: "Tools" }
 ];

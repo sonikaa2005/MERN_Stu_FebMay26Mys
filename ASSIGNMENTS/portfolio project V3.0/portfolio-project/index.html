@@ -1,6 +1,6 @@
 <!-- MERN_Stu_FebMay26Mys\W4\D5\portfolio-project\index.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="">
 
 <head>
     <meta charset="UTF-8">
@@ -30,8 +30,8 @@
 
             <h1 class="text-5xl mb-6">Sonika K</h1>
 
-            <p class="text-xl lg:text-2xl text-slate-600 font-bold mb-10 max-w-md mx-auto lg:mx-0">
-                Full-Stack developer | MERN enthusiast | Competitive Programmer
+            <p class="text-xl lg:text-2xl text-slate-600 font-bold mb-10">
+                I am a <span id="typing-text" class="text-indigo-900"></span>
             </p>
 
             <div
@@ -88,7 +88,7 @@
 
             </ul>
 
-            <button id="theme-toggle"
+           <button id="theme-toggle"
                 class="bg-indigo-600 hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400 text-white px-4 py-2 rounded font-bold transition">
                 Theme
             </button>
@@ -126,6 +126,17 @@
                     class="border rounded px-6 py-3 w-full max-w-md">
 
             </div>
+            <p id="project-count" class="text-center mt-4 font-semibold"></p>
+
+            <!-- project-sorting dropdown -->
+            <div class="text-center mb-6">
+                <select id="project-sort" class="border px-4 py-2 rounded">
+                    <option value="default">Sort By</option>
+                    <option value="name-asc">Name (A → Z)</option>
+                    <option value="name-desc">Name (Z → A)</option>
+                    <option value="status">Status</option>
+                </select>
+            </div>
 
             <!-- Project Filter Bar -->
 
@@ -136,6 +147,21 @@
             <!-- Dynamic container for projects -->
 
             <div id="projects-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="py-16 px-8 bg-slate-100">
+
+        <div class="max-w-7xl mx-auto">
+
+            <h2 class="text-2xl font-bold mb-6">
+                Recently Viewed Projects
+            </h2>
+
+            <div id="recent-projects" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             </div>
 
         </div>
@@ -161,8 +187,7 @@
     </section>
 
     <!-- SKILLS -->
-
-    <section id="skills" class="py-24 px-8 lg:px-16 bg-blue-100">
+    <section id="skills" class="py-16 px-8 lg:px-16 bg-indigo-200">
 
         <div class="max-w-7xl mx-auto">
 
@@ -170,11 +195,9 @@
                 Skills
             </h2>
 
-            <!-- Dynamic Skills Container -->
-
-            <div id="skills-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Skills Container -->
+            <div id="skills-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
             </div>
-
         </div>
 
     </section>
@@ -250,11 +273,17 @@
     <script src="js/features/theme-toggle.js"></script>
     <script src="js/features/project-render.js"></script>
     <script src="js/features/project-search.js"></script>
+    <script src="js/features/project-sort.js"></script>
     <script src="js/features/project-filter.js"></script>
+    <script src="js/features/project-count.js"></script>
     <script src="js/features/education-render.js"></script>
     <script src="js/data/education.js"></script>
     <script src="js/features/scroll-progress-indicator.js"></script>
     <script src="js/features/active-navigation-highlight.js"></script>
+    <script src="js/features/project-description.js"></script>
+    <script src="js/features/typing-animation.js"></script>
+    <script src="js/features/contact-autosave.js"></script>
+    <script src="js/features/recent-projects.js"></script>
     <script src="js/main.js"></script>
 
 </body>

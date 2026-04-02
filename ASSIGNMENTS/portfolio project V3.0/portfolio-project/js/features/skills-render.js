@@ -1,45 +1,47 @@
-function renderSkills(){
-    const skillsContainer = document.getElementById("skills-container");
+function renderSkills() {
 
-    if(!skillsContainer){
-        console.log("Skills container not found");
-        return;
-    }
-    skillsContainer.innerHTML = "";
-    skillsData.forEach(function(skill){
-        //to create outer card
-        const card = document.createElement("div");
-        card.className = "p-8 text-center bg-white rounded-3xl shadow-lg";
+    const container = document.getElementById("skills-container");
+    if (!container) return;
 
-        //create icon
-        const iconBox = document.createElement("div");
-        iconBox.className = "w-20 h-20 mx-auto mb-4 bg-indigo-300 rounded-2xl flex item-center justify-center";
+    container.innerHTML = "";
 
-        //create icon text 
-        const iconText = document.createElement("span");
-        iconText.className = "text-2xl text-white font-bold";
-        iconText.textContent = skill.shortLabel;
+    const categories = [...new Set(skillsData.map(skill => skill.category))];
 
-        //put icon text inside icon box
-        iconBox.appendChild(iconText);
+    categories.forEach(function (category) {
 
-        //create skill name
-        const skillName = document.createElement("h3");
-        skillName.className = "text-xl font-bold mb-2";
-        skillName.textContent = skill.name;
+        // CARD
+        const section = document.createElement("div");
+        section.className =
+            "bg-white p-6 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition duration-300 border border-gray-100";
 
-        //create skill description
-        const skillDescription = document.createElement("p");
-        skillDescription.className = "text-sm";
-        skillDescription.textContent = skill.description;
-        
-        //Append all child elements to card
-        card.appendChild(iconBox);
-        card.appendChild(skillName);
-        card.appendChild(skillDescription);
-        
-        // Apped card to skills container
-        skillsContainer.appendChild(card);
+        // TITLE
+        const title = document.createElement("h3");
+        title.className = "text-xl font-bold mb-4 text-blue-600";
+        title.textContent = category;
+
+        section.appendChild(title);
+
+        // WRAPPER
+        const wrapper = document.createElement("div");
+        wrapper.className = "flex flex-wrap gap-3";
+
+        const filteredSkills = skillsData.filter(skill => skill.category === category);
+
+        filteredSkills.forEach(function (skill) {
+
+            const item = document.createElement("span");
+
+            item.className =
+                "bg-blue-300 text-purple-700 px-4 py-1 rounded-full text-sm font-medium hover:bg-indigo-100 hover:scale-105 transition";
+
+            item.textContent = skill.name;
+
+            wrapper.appendChild(item);
+        });
+
+        section.appendChild(wrapper);
+        container.appendChild(section);
     });
-    console.log("skills rendered successfully");
+
+    console.log("Skills rendered successfully");
 }

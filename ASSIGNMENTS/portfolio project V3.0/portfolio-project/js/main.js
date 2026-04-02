@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded",function(){
+document.addEventListener("DOMContentLoaded", function () {
     //Render skills
     renderSkills();
     initModal();
@@ -7,9 +7,13 @@ document.addEventListener("DOMContentLoaded",function(){
     initThemeToggle();
     renderProjects();
     initProjectSearch();
+    initProjectSorting()
     renderEducation();
     renderFilters();
-    applyLanguage();
     handleScrollProgress();
     handleScrollSpy();
+    updateProjectCountAuto();
+    initTypingAnimation();
+    initContactAutoSave();
+    renderRecentProjects();
 })
