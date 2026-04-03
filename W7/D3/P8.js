@@ -123,7 +123,7 @@ app.post("/refresh", function (req, res) {
     }
 });
 
-app.get("/me", authenticateAccessToken, function (req, res) {
+app.get("/me", authenticateAccessToken, function (req, res) {  //protected route
     res.json({
         success: true,
         message: "Protected user route",
