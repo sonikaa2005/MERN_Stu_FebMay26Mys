@@ -41,3 +41,6 @@ app.get("/profile",function(req,res){
 app.listen(4000, function () {
     console.log("Express-session demo server running @ http://localhost:4000");
 });
+
+//http://localhost:4000/login
+//http://localhost:4000/profile
