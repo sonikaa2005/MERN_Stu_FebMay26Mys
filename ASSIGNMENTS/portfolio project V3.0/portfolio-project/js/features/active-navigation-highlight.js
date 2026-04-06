@@ -41,6 +41,6 @@ function handleScrollSpy() {
     });
 }
 
-// EVENTS
+// Events
 window.addEventListener("scroll", handleScrollProgress);
 window.addEventListener("scroll", handleScrollSpy);
