@@ -10,7 +10,6 @@ function initBackToTop() {
             btn.classList.add("hidden");
         }
     });
-
     btn.addEventListener("click", () => {
         window.scrollTo({
             top: 0,
