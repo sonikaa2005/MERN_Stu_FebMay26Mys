@@ -8,7 +8,7 @@ function initContactAutoSave() {
         return;
     }
 
-    // 🔹 Load saved data on page load
+    // Load saved data on page load
     const savedData = localStorage.getItem("contactForm");
 
     if (savedData) {
@@ -18,7 +18,7 @@ function initContactAutoSave() {
         emailInput.value = parsedData.email || "";
     }
 
-    // 🔹 Save on input
+    // Save on input
     function saveData() {
 
         const data = {
