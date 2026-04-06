@@ -30,8 +30,9 @@
 
             <h1 class="text-5xl mb-6">Sonika K</h1>
 
-            <p class="text-xl lg:text-2xl text-slate-600 font-bold mb-10">
-                I am a <span id="typing-text" class="text-indigo-900"></span>
+            <p class="text-xl lg:text-2xl text-indigo-900 dark:text-indigo-300 font-bold mb-10">
+                <span id="greeting-text"></span><br>
+                I am a <span id="typing-text"></span>
             </p>
 
             <div
@@ -87,8 +88,11 @@
                 <li><a href="#skills" class="nav-link text-lg font-bold hover:text-blue-600">Skills</a></li>
 
             </ul>
+            <footer class="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
+                <p id="location-text"></p>
+            </footer>
 
-           <button id="theme-toggle"
+            <button id="theme-toggle"
                 class="bg-indigo-600 hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400 text-white px-4 py-2 rounded font-bold transition">
                 Theme
             </button>
@@ -284,6 +288,8 @@
     <script src="js/features/typing-animation.js"></script>
     <script src="js/features/contact-autosave.js"></script>
     <script src="js/features/recent-projects.js"></script>
+    <script src="js/features/greeting.js"></script>
+    <script src="js/features/geolocation.js"></script>
     <script src="js/main.js"></script>
 
 </body>
