@@ -10,4 +10,5 @@ const skillsData = [
   { name: "Git", category: "Tools" },
   { name: "GitHub", category: "Tools" },
   { name: "VS Code", category: "Tools" }
+  
 ];
