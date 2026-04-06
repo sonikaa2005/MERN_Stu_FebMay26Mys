@@ -3,7 +3,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 
 const app = express();
-const secretKey = "monkey@123";
+const secretKey = "key@123";
 
 const userToken = jwt.sign(
     {userId:101,role:"user",email:"e@e.com"},
