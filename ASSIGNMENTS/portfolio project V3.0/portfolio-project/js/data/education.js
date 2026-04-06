@@ -20,4 +20,5 @@ const educationData = [
     college: "Buds Foundation School",
     score: "Percentage: 85.12"
   }
+  
 ];
