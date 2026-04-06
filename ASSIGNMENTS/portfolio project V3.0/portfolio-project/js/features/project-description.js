@@ -54,6 +54,5 @@ function renderProjects() {
         container.appendChild(card);
 
     });
-
     console.log("Projects rendered successfully");
 }
