@@ -42,9 +42,9 @@ function generateBookingDetails(movie,showtime,seatCount){
     return new Promise((resolve)=>{
         setTimeout(() => {
             const booking = {
-                bookingId: `BOOK-$(Date.now())`,
+                bookingId: `BOOK-${Date.now()}`,
                 movieId: movie.id,
-                movieTitle: moveie.title,
+                movieTitle: movie.title,
                 time:showtime.time,
                 seatCount
             };
@@ -82,7 +82,6 @@ function processBooking(movie,showtime,seatCount){
 }
 
 //async/await
-
 async function processBookingAsync(movie,showtime,seatCount){
     try{
         bookingEmitter.emit("bookingStarted");
