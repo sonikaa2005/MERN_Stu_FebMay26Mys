@@ -14,14 +14,14 @@ function validateTimeSelection(movie,selectedTime,callback){
     const selectedShowtime = movie.showtimes.find((show)=>show.time.toLowerCase() === selectedTime.toLowerCase());
 
     if(!selectedShowtime){
-        return callback("Invalid time slot selection. Choose a valid time slot.",null);
+        return callback("Invalid time slot selection. Please choose a valid show time.",null);
     }
     callback(null,selectedShowtime);
 
 }
 
 function validateSeatCount(seatCount,callback){
-    if(!isNaN(seatCount) || seatCount <= 0){
+    if(isNaN(seatCount) || seatCount <= 0){
         return callback("Invalid seat count. Enter a valid seat count.",null);
     }
     callback(null,seatCount);
