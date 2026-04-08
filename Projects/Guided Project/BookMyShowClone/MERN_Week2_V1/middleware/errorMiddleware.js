@@ -5,7 +5,7 @@ function errorMiddleware(err,req,res,next){
 
     res.status(statusCode).json({
         success:false,
-        message: err.message || "Internal server error";
+        message: err.message || "Internal server error"
     });
 
 }
