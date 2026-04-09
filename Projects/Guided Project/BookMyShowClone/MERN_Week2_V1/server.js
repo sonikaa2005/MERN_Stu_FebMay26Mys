@@ -1,6 +1,6 @@
 //Main Express server entry point
 
-const app = requires("./app");
+const app = require("./app");
 
 const PORT = 5000;
 
