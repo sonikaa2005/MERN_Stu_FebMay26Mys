@@ -1,6 +1,6 @@
 //Checks the permission for the req and allows it or rejects it
 
-const CustomError = require("../utils/customError");
+const CustomError = require("../utils/CustomError");
 
 function roleMiddleware(...allowedRoles) {//allowedroles as a rest operators
     return(req, res, next) => {
