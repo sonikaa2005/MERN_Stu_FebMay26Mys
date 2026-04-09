@@ -1,7 +1,7 @@
 //Middleware to create and/or verify JWT token
 
 const jwt = require("jsonwebtoken");
-const CustomError = require("../utils/customError");//"../(get out of the folder first)"
+const CustomError = require("../utils/CustomError");//"../(get out of the folder first)"
 
 const JWT_SECRET = "Thumbnail"; //secret key
 
