@@ -100,12 +100,12 @@ function deleteMovie(req,res,next){
         return next(new CustomError("Movie not found",404));
     }
 
-    const deletedMovie = movies.splice(movieIndex,1);    
+    const deleteMovie = movies.splice(movieIndex,1);    
 
     res.status(200).json({
         success:true,
         message:"Movie deleted Successfully",
-        data: deletedMovie[0]
+        data: deleteMovie[0]
     });
 }
 
@@ -115,5 +115,5 @@ module.exports = {
     getMovieById,
     addMovie,
     updateMovie,
-    deletedMovie
+    deleteMovie
 };
