@@ -1,6 +1,6 @@
 // functions for movie handling are created
 const movies = require("../data/movies");
-const CustomError = require("../utils/customError");
+const CustomError = require("../utils/CustomError");
 
 function getHome(req,res){
     res.status(200).json({
