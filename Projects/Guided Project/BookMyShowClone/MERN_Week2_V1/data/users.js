@@ -15,7 +15,7 @@ const users = [
         email: "a@e.com",
         password: "admin123",
         role: "admin"
-    },
+    }
 ];
 
 module.exports = users;
