@@ -15,7 +15,7 @@ async function main(){
 
         const user = mongoose.model("User",userSchema);
         console.log("mongoose schema & model created successfully");
-        console.log("Model name:",User.modelName);
+        console.log("Model name:",user.modelName);
         await mongoose.connection.close();
         console.log("connection closed");
     }
