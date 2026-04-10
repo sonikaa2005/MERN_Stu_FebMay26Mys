@@ -3,12 +3,12 @@
 const jwt = require("jsonwebtoken");
 const CustomError = require("../utils/CustomError");//"../(get out of the folder first)"
 
-const JWT_SECRET = "Thumbnail"; //secret key
+const {JWT_SECRET} = "ThumbNail"; //secret key
 
 function authMiddleware(req, res, next) {
     try {
         const authHeader = req.headers.authorization;
-        const tokenFromHeader = authHeader && authHeader.startsWith("Bearer") ? authHeader.split(" ")[1] : null;
+        const tokenFromHeader = authHeader && authHeader.startsWith("Bearer")?authHeader.split(" ")[1] : null;
 
         const token = tokenFromHeader || req.cookies.token;
 
@@ -27,5 +27,5 @@ function authMiddleware(req, res, next) {
 
 module.exports = {
     authMiddleware,
-    JWT_SECRET,
+    JWT_SECRET
 };
