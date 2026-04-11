@@ -1,39 +1,48 @@
 // Applied filters to the query using comparison operators
 const mongoose = require("mongoose");
 
-async function runFilterDemo(){
-    try{
-        
-        await mongoose.connect("mongodb://localhost:27017/merntraining");
-        console.log("MongoDB connected successfully");
-
-        const productSchema = new mongoose.Schema({
+const productSchema = new mongoose.Schema({
             name: String,
             price: Number,
             category: String,
             status: String
         }); 
 
-        const Product = mongoose.models.Product || mongoose.model("Product",productSchema);
+const Product = mongoose.models.Product || mongoose.model("Product",productSchema);
+
+async function runFilterDemo(){
+    try{
+        
+        await mongoose.connect("mongodb://localhost:27017/merntraining");
+        console.log("MongoDB connected successfully");
 
         await Product.create([
-            {name: "Torch",
-            price: 200,
-            category: "Electronics",
-            status: "active"},
             {name: "Laptop",
             price: 60000,
             category: "Electronics",
             status: "active"},
-            {name: "Bag",
-            price: 2000,
+            {name: "bag",
+            price: 3000,
             category: "Stationary",
             status: "inactive"},
-            {name: "Mouse",
-            price: 1000,
+            {name: "keybord",
+            price: 6000,
+            category: "Electronics",
+            status: "active"},
+            {name: "mobile",
+            price: 50000,
             category: "Electronics",
             status: "inactive"}
         ]);
+
+        // const productSchema = new mongoose.Schema({
+        //     name: String,
+        //     price: Number,
+        //     category: String,
+        //     status: String
+        // }); 
+
+        // const Product = mongoose.models.Product || mongoose.model("Product",productSchema);
 
         const equalQuery = await Product.find({status:{$eq:"active"}});
         // console.log("Products which are active:",equalQuery);
@@ -51,4 +60,6 @@ async function runFilterDemo(){
         console.log("Filter demo error:",error.message);
     }
 }
-runFilterDemo();
+// runFilterDemo();
+
+module.exports = Product;
