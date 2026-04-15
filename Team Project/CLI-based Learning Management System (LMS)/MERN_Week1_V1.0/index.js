@@ -1,235 +1,104 @@
-// index.js
+const readline = require('readline');
+const chalk = require('chalk');
 
-const readline = require("readline");
-const chalk = require("chalk");
+const courses = require('./courses');
+const user = require('./user');
+const enroll = require('./enroll');
+const completeLesson = require('./progress');
+const withdraw = require('./withdraw');
+const { validateChoice } = require('./validator');
+const emitter = require('./events');
+const { displayCourses } = require('./utils');
 
-const courses = require("./courses");
-const enrollCourse = require("./enroll");
-const withdrawCourse = require("./withdraw");
-
-const {
-  user,
-  setUserName
-} = require("./user");
-
-const {
-  completeLesson,
-  getProgress
-} = require("./progress");
-
-const {
-  validateInput,
-  validateCourseId,
-  validateLesson
-} = require("./validator");
-
-const emitter = require("./events");
-
-// CLI Setup
 const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
+    input: process.stdin,
+    output: process.stdout
 });
 
+// Event listeners
+emitter.on("enrollmentConfirmed", (courses) => {
+    console.log(chalk.green(`Enrolled in ${courses}`));
+});
 
-function startApp() {
-  rl.question("Enter your name: ", (name) => {
-    validateInput(name, (err, validName) => {
-      if (err) {
-        if (err === "Maximum attempts reached") {
-          console.log(chalk.red("Too many attempts. Exiting..."));
-          return rl.close();
-        }
-        return startApp();
-      }
+emitter.on("lessonCompleted", (courses) => {
+    console.log(chalk.blue(`Lesson completed in ${courses}`));
+});
 
-      setUserName(validName);
-      emitter.emit("sessionStarted", validName);
-      showMenu();
-    });
-  });
-}
+emitter.on("coursesWithdrawn", (courses) => {
+    console.log(chalk.yellow(`Withdrawn from ${courses}`));
+});
 
-function showMenu() {
-  console.log(`
-    LMS MENU
-1. View all courses
-2. View course details
-3. Enroll in a course
-4. View enrolled courses
-5. Mark lesson as completed
-6. View progress
-7. Withdraw from course
-8. Exit
+function menu() {
+    console.log(`
+1. View Courses
+2. Enroll
+3. View Enrolled
+4. Complete Lesson
+5. Withdraw
+6. Exit
 `);
 
-  rl.question("Choose an option: ", handleMenu);
-}
+    rl.question("Choose option: ", (input) => {
+        validateChoice(input, async (err, choice) => {
+            if (err) return console.log(chalk.red(err));
+            
+            switch (choice) {
+                case 1:
+                    displayCourses(courses);
+                    break;
 
+                case 2:
+                    rl.question("Enter Courses ID: ", async (id) => {
+                        try {
+                            await enroll(Number(id));
+                        } catch (e) {
+                            console.log(chalk.red(e));
+                        }
+                        menu();
+                    });
+                    return;
 
-function handleMenu(choice) {
-  switch (choice) {
-    case "1":
-      viewCourses();
-      break;
+                case 3:
+                    console.log(user.enrolledCourses);
+                    break;
 
-    case "2":
-      viewCourseDetails();
-      break;
+                case 4:
+                    rl.question("Course ID: ", (cid) => {
+                        rl.question("Lesson Index: ", async (lid) => {
+                            try {
+                                const progress = await completeLesson(Number(cid), Number(lid));
+                                console.log(chalk.green(`Progress: ${progress}%`));
+                            } catch (e) {
+                                console.log(chalk.red(e));
+                            }
+                            menu();
+                        });
+                    });
+                    return;
 
-    case "3":
-      enroll();
-      break;
+                case 5:
+                    rl.question("Course ID: ", (id) => {
+                        console.log(withdraw(Number(id)));
+                        menu();
+                    });
+                    return;
 
-    case "4":
-      viewEnrolled();
-      break;
+                case 6:
+                    rl.close();
+                    console.log("GoodBye....")
+                    return;
 
-    case "5":
-      markLesson();
-      break;
-
-    case "6":
-      viewProgress();
-      break;
-
-    case "7":
-      withdraw();
-      break;
-
-    case "8":
-      exitApp();
-      return;
-
-    default:
-      console.log(chalk.red(" Invalid choice"));
-  }
-
-  setTimeout(showMenu, 500);
-}
-
-
-// 1. View all courses
-function viewCourses() {
-  console.log("\n Available Courses:");
-  courses.forEach(c => {
-    console.log(
-      `${c.id}. ${c.title} | ${c.category} | ${c.difficulty}`
-    );
-  });
-}
-
-// 2. View course details
-function viewCourseDetails() {
-  rl.question("Enter Course ID: ", (id) => {
-    validateCourseId(id, courses, (err, course) => {
-      if (err) return console.log(err);
-
-      emitter.emit("courseViewed", course);
-
-      console.log(`
- Title: ${course.title}
- Instructor: ${course.instructor}
- Difficulty: ${course.difficulty}
- Category: ${course.category}
-Lessons: ${course.lessons.join(", ")}
-      `);
+                default:
+                    console.log(chalk.red("Invalid choice"));
+            }
+            menu();
+        });
     });
-  });
 }
 
-// 3. Enroll
-function enroll() {
-  rl.question("Enter Course ID: ", (id) => {
-    validateCourseId(id, courses, (err) => {
-      if (err) return;
-
-      enrollCourse(id).catch(() => {});
-    });
-  });
-}
-
-// 4. View enrolled courses
-function viewEnrolled() {
-  console.log("\n🎓 Your Courses:");
-
-  if (user.enrolledCourses.length === 0) {
-    console.log("No courses enrolled");
-    return;
-  }
-
-  user.enrolledCourses.forEach(c => {
-    console.log(`${c.courseId}. ${c.title}`);
-  });
-}
-
-// 5. Mark lesson complete
-function markLesson() {
-  rl.question("Enter Course ID: ", (id) => {
-    const course = user.enrolledCourses.find(
-      c => c.courseId == id
-    );
-
-    if (!course) {
-      emitter.emit("operationFailed", "Not enrolled in course");
-      return;
-    }
-
-    rl.question("Enter Lesson Name: ", (lessonName) => {
-      validateLesson(course, lessonName, async (err, lesson) => {
-        if (err) return;
-
-        try {
-          const result = await completeLesson(id, lesson);
-
-          console.log(
-            chalk.green(`Progress: ${result.progress}%`)
-          );
-        } catch (error) {
-          // already handled in progress.js
-        }
-      });
-    });
-  });
-}
-
-// 6. View progress
-function viewProgress() {
-  const progressData = getProgress();
-
-  if (typeof progressData === "string") {
-    console.log(progressData);
-    return;
-  }
-
-  console.log("\n Progress:");
-  progressData.forEach(p => {
-    console.log(
-      `${p.course}: ${p.completed}/${p.total} (${p.progress}%)`
-    );
-  });
-
-  emitter.emit("progressViewed");
-}
-
-// 7. Withdraw
-function withdraw() {
-  rl.question("Enter Course ID: ", (id) => {
-    const result = withdrawCourse(id);
-
-    if (result) {
-      emitter.emit("courseWithdrawn", result);
-    } else {
-      emitter.emit("operationFailed", "Not enrolled");
-    }
-  });
-}
-
-// 8. Exit
-function exitApp() {
-  console.log(chalk.blue("\n Exiting LMS. Goodbye!"));
-  rl.close();
-}
-
-
-startApp();
+rl.question("Enter your name: ", (name) => {
+    user.name = name;
+    console.log(chalk.green(`Welcome ${name}`));
+    emitter.emit("sessionStarted");
+    menu();
+});
