@@ -22,7 +22,7 @@ const courses = [{
 {
     id:3,
     title:"HTML & CSS",
-    instructor:"Bhanu",
+    instructor:"Anu",
     category:"Web Development",
     level:"Beginner",
     sataus:"True",
@@ -32,7 +32,7 @@ const courses = [{
 {
     id:4,
     title:"Python",
-    instructor:"Sinchana",
+    instructor:"Saara",
     category:"Programming",
     level:"Beginner",
     sataus:"False",
