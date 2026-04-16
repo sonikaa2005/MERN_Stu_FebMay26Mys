@@ -6,5 +6,5 @@ function generateOTP(length = 6){
     return crypto.randomInt(0,10**length)
     .toString()
     .padStart(length,'0');
-} //000044(patstart)
+} //000044(padstart)
 console.log("OTP: ",generateOTP());
