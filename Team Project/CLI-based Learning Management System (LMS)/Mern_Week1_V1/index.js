@@ -38,7 +38,7 @@ function start() {
 // MENU
 function menu() {
   console.log(chalk.gray(`
-========= LMS MENU =========
+    LMS MENU 
 1. View All Courses
 2. View Course Details
 3. Enroll in Course
@@ -47,7 +47,6 @@ function menu() {
 6. View Progress
 7. Withdraw from Course
 8. Exit
-============================
 `));
 
   rl.question("Choose option: ", (choice) => {
