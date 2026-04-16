@@ -68,7 +68,7 @@ function menu() {
           if (!course) {
             console.log(chalk.red("Invalid course ID"));
           } else {
-            console.log(chalk.gray(`
+            console.log(chalk.blue(`
 Title: ${course.title}
 Instructor: ${course.instructor}
 Lessons: ${course.lessons.join(", ")}
