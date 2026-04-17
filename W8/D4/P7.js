@@ -9,6 +9,7 @@ function generateOTP(length = 6) {
 
 async function hashOTP(otp) {
     return await bcrypt.hash(otp, 10); // converts redable otp to hashed otp
+    //10 indicates salt round, it encrypts the otp 2^10 times.
 }
 
 async function verifyOTP(input, hash) {
