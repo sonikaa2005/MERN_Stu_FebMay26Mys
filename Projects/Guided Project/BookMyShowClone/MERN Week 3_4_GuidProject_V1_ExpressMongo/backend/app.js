@@ -2,10 +2,14 @@
 
 const express = require("express");
 
+const authRoutes = require("./src/routes/auth.routes");
+
 const app = express();
 
 app.use(express.json());
+app.use("/api/auth", authRoutes);
 
+//base url
 app.get("/",(req,res)=>{
     res.status(200).json({
         success:true,
