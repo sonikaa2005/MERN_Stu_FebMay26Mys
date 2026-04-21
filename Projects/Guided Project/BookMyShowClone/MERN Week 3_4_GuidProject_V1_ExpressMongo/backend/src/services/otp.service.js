@@ -1,18 +1,20 @@
 const OTP = require("../models/OTP");
-const bcrypt = require("bycrypt");
+const bcrypt = require("bcrypt");
 
-//generate OTP
-exports.generateOTP = async(eamil) => { // task to make to convert by using crypto to generate OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const hashedOTP = await bcrypt.hash(otp, 10); // 10 is the salt rounds for hashing
+//Generate OTP
+exports.generateOTP = async(email) => {
+    const otp = Math.floor(100000+Math.random()*900000).toString();
 
-    const expiresAt = new Date(Date.now() + 5*60*1000);//5 minutes
+    const hashedOTP = await bcrypt.hash(otp,10);
+
+    const expiresAt = new Date(Date.now() + 5*60*1000);
 
     await OTP.create({
         email,
         otp:hashedOTP,
         expiresAt,
     });
-    console.log("Generated OTP:",otp); // testing purpose only, remove in production
+
+    console.log("Generated OTP: ",otp); //testing only
     return otp;
 };
