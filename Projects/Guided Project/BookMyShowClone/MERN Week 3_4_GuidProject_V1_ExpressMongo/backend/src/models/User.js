@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
         required:[true,"Email is required"],
         unique:true, // no two users can have same email
         lowercase:true, // convert email to lowercase
-        match:[/^\s+@\s+\.\s+$/,"Please enter a valid email"], 
+        match:[/^\S+@\S+\.\S+$/,"Please enter a valid email"], 
         index:true, // create index on email field for faster queries
     },
      password:{
