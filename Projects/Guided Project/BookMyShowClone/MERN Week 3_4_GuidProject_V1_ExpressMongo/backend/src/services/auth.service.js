@@ -1,49 +1,75 @@
-const authService = require('../services/auth.service');
+const User = require("../models/User");
+const OTP = require("../models/OTP");
+const otpService = require("./otp.service");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-//Register
-exports.register = async (req,res,next) => {
-    try{
-        const result = await authService.registerUser(req.body);
-        res.status(201).json({
-            success:true,
-            message:"User registered.OTP sent.",
-            data:result
-        });
+// Register user
+exports.registerUser = async ({ name, email, password }) => {
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+        throw new Error("User already exists");
     }
-    catch(error){
-        next(error);
-    }
+
+    const user = await User.create({
+        name,
+        email,
+        password,
+    });
+
+    await otpService.generateOTP(email);
+
+    return { email: user.email };
 };
 
 //Verify OTP
+exports.verifyOTP = async ({ email, otp }) => {
+    const record = await OTP.findOne({ email }).select("+otp");
 
-exports.verifyOTP = async (req,res,next) => {
-    try{
-        await authService.verifyOTP(req.body);
+    if (!record) {
+        throw new Error("OTP expired or not found");
+    }
 
-        res.status(200).json({
-            success:true,
-            message:"OTP verified successfully",
-        });
+    const isMatch = await bcrypt.compare(otp, record.otp);
+
+    if (!isMatch) {
+        record.attempts += 1;
+        await record.save();
+        throw new Error("Invalid OTP");
     }
-    catch(error){
-        next(error);
-    }
+
+    await User.updateOne({ email }, { isVerified: true });
+    return true;
 };
 
-//login
+// Login
+exports.loginUser = async ({ email, password }) => {
+    const user = await User.findOne({ email }).select("+password");
 
-exports.login = async (req,res,next) => {
-    try{
-        const result = await authService.loginUser(req.body);
-        
-        res.status(200).json({
-            success:true,
-            message:"Login successful",
-            data:result,
-        });
+    if (!user) {
+        throw new Error("User not found");
     }
-    catch(error){
-        next(error);
+    if (!user.isVerified) {
+        throw new Error("User not verified");
     }
+    const isMatch = await user.comparePassword(password);
+
+    if (!isMatch) {
+        throw new Error("Invalid credentials");
+    }
+
+    const token = jwt.sign(
+        { id: user._id, role: user.role },
+        process.env.JWT_SECRET,
+        { expiresIn: "1d" }
+    );
+
+    return {
+        token,
+        user: {
+            id: user._id,
+            role: user.role,
+        },
+    };
 };
