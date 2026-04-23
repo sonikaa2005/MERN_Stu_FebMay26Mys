@@ -5,21 +5,21 @@ const userSchema = new mongoose.Schema({
     name:{
         type:String,
         required:[true,"Name is required"],
-        trim:true, // remove extra spaces
+        trim:true,
     },
-     email:{
+    email:{
         type:String,
         required:[true,"Email is required"],
-        unique:true, // no two users can have same email
-        lowercase:true, // convert email to lowercase
-        match:[/^\S+@\S+\.\S+$/,"Please enter a valid email"], 
-        index:true, // create index on email field for faster queries
+        unique:true,
+        lowercase:true,
+        match:[/^\S+@\S+\.\S+$/,"Please use a valid email"],
+        index:true,
     },
-     password:{
+    password:{
         type:String,
         required:[true,"Password is required"],
         minlength:6,
-        select:false, //it hides the password
+        select:false,
     },
     role:{
         type:String,
@@ -32,11 +32,12 @@ const userSchema = new mongoose.Schema({
     },
 },
 {
-    timestamps:true, // it will automatically add createdAt and updatedAt fields
-});
-//Hash password before saving user to db
-userSchema.pre("save",async function(){
-    if(!this.isModified("password")){
+    timestamps:true,
+}
+);
+//Hash password before save
+userSchema.pre("save",async function () {
+    if (!this.isModified("password")) {
         return;
     }
     try{
@@ -48,7 +49,7 @@ userSchema.pre("save",async function(){
     }
 });
 
-//method to compare password during login
+// Compare password function
 userSchema.methods.comparePassword = async function(enteredPassword){
     return await bcrypt.compare(enteredPassword,this.password);
 };
