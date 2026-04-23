@@ -1,4 +1,4 @@
-const movie = require("../models/Movie");
+const Movie = require("../models/Movie");
 
 // Create Movie
 exports.createMovie = async (data) => {
