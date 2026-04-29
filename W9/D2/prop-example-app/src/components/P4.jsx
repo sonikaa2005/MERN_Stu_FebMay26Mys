@@ -26,7 +26,7 @@ function ProfileAvatar({ user }){
 }
 
 export function PropDrillingDemo(){
-    const user = {name: 'Rakesh'};
+    const user = {name: 'Sonika'};
     return(
         <div>
             <h3>Problem: prop drilling</h3>
