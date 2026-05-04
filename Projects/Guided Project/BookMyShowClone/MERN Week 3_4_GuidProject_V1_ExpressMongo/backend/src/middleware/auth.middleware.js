@@ -33,6 +33,8 @@ exports.protect = async(req,res,next)=>{
         }
         //Attach user to request
         req.user = user;
+        console.log(req.user);
+        
         next();
     }
     catch(error){
