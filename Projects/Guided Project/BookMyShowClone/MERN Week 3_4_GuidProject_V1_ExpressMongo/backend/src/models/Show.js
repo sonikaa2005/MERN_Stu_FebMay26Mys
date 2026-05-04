@@ -64,4 +64,5 @@ showSchema.pre("save", async function () {
         throw new Error("Available seats cannot exceed total seats");
     }
 });
+const seatsModel = mongoose.model("seat",seatSchema);
 module.exports = mongoose.model("Show",showSchema);
