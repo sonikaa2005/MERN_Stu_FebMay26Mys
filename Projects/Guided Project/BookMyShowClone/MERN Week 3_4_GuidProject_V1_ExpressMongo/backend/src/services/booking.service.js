@@ -1,114 +1,142 @@
+// src\services\booking.service.js
 const Booking = require("../models/Booking");
 const Show = require("../models/Show");
-
-// Create Booking
-exports.createBooking = async (userId,{showId,seats}) => {
+const CustomError = require("../utils/customError");
+/*
+CREATE BOOKING
+*/
+exports.createBooking = async (userId, { showId, seats }) => {
     // 1. Get show
+    console.log(userId, showId, seats);
+
     const show = await Show.findById(showId);
+    if (!show) //throw new Error("Show not found");
+        throw new CustomError("Show not found", 404);
+    console.log(show);
+    if (show.seats.length <= 0) {
+        const generateSeats = async (totalSeats) => {
+            const seats = [];
+            const rows = ["A", "B", "C", "D"];
 
-    if (!show) {
-        throw new Error("Show not found");
+            let count = 0;
+
+            for (let row of rows) {
+                for (let i = 1; i <= 10; i++) {
+                    if (count >= totalSeats) break;
+
+                    seats.push({
+                        seatNumber: `${row}${i}`,
+                        isBooked: false,
+                    });
+
+                    count++;
+                }
+            }
+
+            show.seats = seats;
+        };
+        await show.save();
+        generateSeats();
     }
 
-    // 2. validate seats
-    const selectedSeats = show.seats.filter((seat)=>
-        seats.includes(seat.seatNumber));
-    if (selectedSeats.length!=seats.length) {
-       throw new Error("seats do not exist");        
-    }
+    // 2. Validate seats
+    const selectedSeats = show.seats.filter((seat) =>
+        seats.includes(seat.seatNumber)
+    );
+    console.log("sel", selectedSeats);
 
+    if (selectedSeats.length !== seats.length) {
+        throw new CustomError("Some seats do not exist", 400);
+    }
     // 3. Check if already booked
-    for(let seat of selectedSeats){
+    for (let seat of selectedSeats) {
         if (seat.isBooked) {
-            throw new Error(`Seat ${seat.seatNumber} is already booked`);
+            throw new CustomError(`Seat ${seat.seatNumber} is already booked`, 409);
         }
     }
-
     // 4. Mark seats as booked
-    show.seats = show.seats.map((seat)=>{
+    show.seats = show.seats.map((seat) => {
         if (seats.includes(seat.seatNumber)) {
             seat.isBooked = true;
         }
         return seat;
     });
     // 5. Update available seats
-    show.availableSeats -=seats.length;
-
+    show.availableSeats -= seats.length;
     await show.save();
-
     // 6. Create booking
     const booking = await Booking.create({
-        userId, showId, seats, totalSeats: seats.length,
+
+        userId,
+        showId,
+        seats,
+        totalSeats: seats.length,
     });
     return booking;
 };
-
-// Get user bookings
+/*
+GET USER BOOKINGS
+*/
 exports.getUserBookings = async (userId) => {
     const bookings = await Booking.find({
         userId,
-        status:"booked",
+        status: "booked",
     })
-    .populate({
-        path:"showId",
-        select:"date time availableSeats movieId",
-        populate:{
-            path: "movieId",
-            select:"title genre",
+        .populate({
+            path: "showId",
+            select: "date time availableSeats movieId",
+            populate: {
+                path: "movieId",
+                select: "title genre",
+            },
+        })
+        .sort("-createdAt");
+    // Transform response
+    return bookings.map((booking) => ({
+        bookingId: booking._id,
+        seats: booking.seats,
+        totalSeats: booking.totalSeats,
+        status: booking.status,
+        bookingTime: booking.bookingTime,
+        show: {
+            id: booking.showId._id,
+            date: booking.showId.date,
+            time: booking.showId.time,
+            availableSeats: booking.showId.availableSeats,
         },
-    })
-    .sort("-createdAt");
+        movie: {
+            id: booking.showId.movieId._id,
+            title: booking.showId.movieId.title,
+            genre: booking.showId.movieId.genre,
 
-    //Transform response
-    return bookings.map((booking)=>({
-        bookingId:booking._id,
-        seats:booking.seats,
-        totalSeats:booking.totalSeats,
-        status:booking.status,
-        bookingTime:booking.bookingTime,
-
-        show:{
-            id:booking.showId._id,
-            date:booking.showId.date,
-            time:booking.showId.time,
-            availableSeats:booking.showId.availableSeats,
-        },
-        movie:{
-            id:booking.showId.movieId._id,
-            title:booking.showId.movieId.title,
-            genre:booking.showId.movieId.genre,
         },
     }));
 };
-
-// Cancel booking
-exports.cancelBooking = async (bookingId,userId) => {
+/*
+CANCEL BOOKING
+*/
+exports.cancelBooking = async (bookingId, userId) => {
     const booking = await Booking.findById(bookingId);
-    if(!booking)
-        throw new Error("Booking not found");
-
-    if (booking.userId.toString()!==userId.toString()) {
-        throw new Error("Unauthorized");
+    if (!booking) throw new CustomError("Booking not found", 404);
+    if (booking.userId.toString() !== userId.toString()) {
+        throw new CustomError("Unauthorized", 401);
     }
-
-    if(booking.status === "cancelled"){
-        throw new Error("Already cancelled.");
+    if (booking.status === "cancelled") {
+        throw new CustomError("Already cancelled", 409);
     }
-
-    // 1.get show
+    // 1. Get show
     const show = await Show.findById(booking.showId);
     // 2. Release seats
-    show.seats = show.seats.map((seat)=>{
+    show.seats = show.seats.map((seat) => {
         if (booking.seats.includes(seat.seatNumber)) {
             seat.isBooked = false;
         }
         return seat;
     });
     // 3. Update available seats
-    show.availableSeats +=booking.seats.length;
+    show.availableSeats += booking.seats.length;
     await show.save();
-
     // 4. Update booking
     booking.status = "cancelled";
-    await booking.save();    
+    await booking.save();
 };
