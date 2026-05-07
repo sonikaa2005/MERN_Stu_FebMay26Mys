@@ -5,9 +5,6 @@ import { useState } from "react";
 /** Controlled component
  * A form input whose values is controlled by the react state
  */
-// Common form patterns
-// Controlled component
-// A form input whose values is controlled by the React state
 export function FormsPattern()
 {
     const [name, setName] = useState('');
