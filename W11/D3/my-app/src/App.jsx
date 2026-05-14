@@ -1,12 +1,18 @@
 import './App.css'
 import {ManagingApiState} from "./components/P1";
 import { UseEffectLifeCycle } from './components/P2';
+import { AxiosLifecycle } from './components/P3';
+import { CRUDOperations } from './components/P4';
+import { PaginationCaching } from './components/P5';
 function App() {
 
   return (
     <>
       {/* <ManagingApiState /> */}
-      <UseEffectLifeCycle />
+      {/* <UseEffectLifeCycle /> */}
+      {/* <AxiosLifecycle/> */}
+      {/* <CRUDOperations /> */}
+      <PaginationCaching/>
     </>
   )
 }
