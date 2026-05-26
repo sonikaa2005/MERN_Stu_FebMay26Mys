@@ -134,7 +134,7 @@ export function LoginFlow() {
 
                 <code>
                     <strong>Token:</strong>
-                    {returnedToken||"No token returned yet"}
+                    {returnedToken || "No token returned yet"}
                 </code>
             </p>
             <h4>AuthContext State</h4>
@@ -143,5 +143,4 @@ export function LoginFlow() {
             </code>
         </section>
     );
-
 }
