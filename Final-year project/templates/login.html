@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login | DUEVR</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="login-bg">
+
+<div class="login-box">
+    <h1 class="login-title">Dynamic Urban Evaluation<br>Routing Protocol in VANET</h1>
+
+    {% if error %}
+    <p style="color:red; font-size:20px;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST" action="/login">
+        <input type="text" name="username" placeholder="Enter Username" class="input-box" required>
+        <input type="password" name="password" placeholder="Enter Password" class="input-box" required>
+        <button type="submit" class="login-btn">Login</button>
+    </form>
+</div>
+
+</body>
+</html>

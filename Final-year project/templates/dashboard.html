@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DUEVR Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dash-bg">
+
+<a href="/logout" class="logout-btn">Logout</a>
+
+<div class="center-box">
+
+<h1 class="dash-title">Dynamic Urban Evaluation Routing Dashboard</h1>
+
+<h2>📌 Python Simulation Codes</h2>
+
+<div class="code-box">
+    <p><b>graph_main.py</b></p>
+    <a href="/run_web/graph_main.py" class="btn">Run in Web</a>
+    <a href="/run_vs/graph_main.py" class="btn">Run in VS</a>
+</div>
+
+<div class="code-box">
+    <p><b>main.py</b></p>
+    <a href="/run_web/main.py" class="btn">Run in Web</a>
+    <a href="/run_vs/main.py" class="btn">Run in VS</a>
+</div>
+
+<div class="code-box">
+    <p><b>vanet_ml.py</b></p>
+    <a href="/run_web/vanet_ml.py" class="btn">Run in Web</a>
+    <a href="/run_vs/vanet_ml.py" class="btn">Run in VS</a>
+</div>
+
+<h2>📊 Simulation Graphs</h2>
+
+<div class="graph-row">
+    <a href="{{ url_for('static', filename='pdr.png') }}" target="_blank">
+        <img src="{{ url_for('static', filename='pdr.png') }}" class="graph-icon">
+    </a>
+
+    <a href="{{ url_for('static', filename='latency.png') }}" target="_blank">
+        <img src="{{ url_for('static', filename='latency.png') }}" class="graph-icon">
+    </a>
+
+    <a href="{{ url_for('static', filename='throughput.png') }}" target="_blank">
+        <img src="{{ url_for('static', filename='throughput.png') }}" class="graph-icon">
+    </a>
+</div>
+
+</div>
+
+</body>
+</html>

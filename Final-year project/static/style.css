@@ -1,0 +1,115 @@
+body {
+    margin: 0;
+    font-family: Arial;
+}
+
+/* Backgrounds */
+.login-bg {
+    background-image: url("login_bg.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.dash-bg {
+    background-image: url("dashboard_bg.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+/* Login Box */
+.login-box {
+    width: 450px;
+    margin: 130px auto;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.login-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.input-box {
+    width: 90%;
+    padding: 12px;
+    margin: 10px;
+    border-radius: 8px;
+    font-size: 18px;
+}
+
+.login-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px;
+    width: 95%;
+    font-size: 20px;
+    border-radius: 8px;
+}
+
+/* Dashboard */
+.logout-btn {
+    position: absolute;
+    right: 25px;
+    top: 25px;
+    background: red;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.center-box {
+    background: rgba(255,255,255,0.85);
+    padding: 25px;
+    width: 70%;
+    margin: 60px auto;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.code-box {
+    margin-bottom: 25px;
+}
+
+.btn {
+    background: #000;
+    color: #fff;
+    padding: 8px 16px;
+    margin: 5px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+/* Graph Icons */
+.graph-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.graph-icon {
+    width: 180px;
+    height: 130px;
+    border-radius: 10px;
+    border: 2px solid white;
+    cursor: pointer;
+}
+
+/* Output */
+.output-box {
+    width: 70%;
+    margin: 80px auto;
+    background: rgba(255,255,255,0.85);
+    padding: 25px;
+    border-radius: 15px;
+}
+
+pre {
+    font-size: 22px;
+    white-space: pre-wrap;
+}

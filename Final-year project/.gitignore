@@ -1,0 +1,14 @@
+venv/
+.venv/
+
+vanet_dataset.csv
+requirements.txt
+output.txt
+
+__pycache__/
+*.pyc
+
+.vscode/
+.idea/
+
+.env
