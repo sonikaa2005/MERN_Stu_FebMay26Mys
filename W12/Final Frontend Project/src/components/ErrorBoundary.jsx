@@ -2,7 +2,6 @@
  * fails/throws an error during rendering
  * fallback UI
  */
-
 import React from "react";
 class ErrorBoundary extends React.Component {
     constructor(props) {

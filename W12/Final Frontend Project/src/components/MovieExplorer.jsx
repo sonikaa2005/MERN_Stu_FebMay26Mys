@@ -50,13 +50,13 @@ export default function MovieExplorer() {
         return movies.filter(movie =>
             movie.title.toLowerCase().includes(search.toLowerCase())
         );
-    }, [movies,search]);
+    }, [movies, search]);
 
     //Pagination
-    const totalPages = Math.ceil(filteredMovies.length/ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(filteredMovies.length / ITEMS_PER_PAGE);
 
     const paginatedMovies = filteredMovies.slice(
-        (page-1)*ITEMS_PER_PAGE,page*ITEMS_PER_PAGE
+        (page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE
     );
 
     //Reset page
@@ -116,15 +116,15 @@ export default function MovieExplorer() {
                         <button style={styles.button}
                             disabled={page === 1}
                             onClick={() => {
-                                setPage(prev => prev-1);
+                                setPage(prev => prev - 1);
                             }}>Previous</button>
 
                         <span>Page {page} of {totalPages}</span>
 
                         <button style={styles.button}
-                            disabled= {page === totalPages}
+                            disabled={page === totalPages}
                             onClick={() => {
-                                setPage(prev => prev+1);
+                                setPage(prev => prev + 1);
                             }}>Next</button>
                     </div>
                 )
