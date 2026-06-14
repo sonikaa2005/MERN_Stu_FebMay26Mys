@@ -1,9 +1,7 @@
 // src/pages/Signup.jsx
-
-
 /*
 =========================================================
-SPRINT 1 – SIGNUP PAGE
+SPRINT 2 – REAL SIGNUP INTEGRATION
 
 
 TOPICS COVERED:
@@ -11,16 +9,18 @@ TOPICS COVERED:
 
 ✓ Controlled Components
 ✓ useState
-✓ Form Handling
-✓ Event Handling
-✓ Link Navigation
+✓ Form Submission
+✓ API Integration
+✓ Loading State
+✓ Error Handling
+✓ useNavigate
 
 
 WHY THIS COMPONENT?
 
 
-Signup is the starting point of the
-authentication journey.
+Signup is the user's entry point into
+the authentication system.
 
 
 Sprint 1:
@@ -28,19 +28,37 @@ Sprint 1:
 
 UI Shell
 ↓
-Basic Form Handling
+console.log()
 
 
 Sprint 2:
 
 
-Register API
+Signup Form
 ↓
-OTP Verification
+registerUser()
 ↓
-Role Assignment
+Backend Validation
 ↓
-Session Management
+Success Feedback
+↓
+Login Page
+
+
+IMPLEMENTATION NOTES
+
+
+• Uses registerUser() from authApi.js
+• Prevents duplicate submissions
+• Preserves backend error messages
+• Redirects users to login after success
+
+
+KEY TAKEAWAYS
+
+
+Pages manage UI.
+API files manage communication.
 
 
 =========================================================
@@ -48,164 +66,321 @@ Session Management
 
 
 import { useState } from "react";
+
+
 import { Link, useNavigate } from "react-router-dom";
 
 
+import { registerUser } from "../api/authApi";
+
+
 export default function Signup() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
 
-    const [form, setForm] = useState({
-        name: "",
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
 
-        email: "",
+  const [loading, setLoading] = useState(false);
 
 
-        password: "",
+  const [error, setError] = useState("");
 
 
-        confirmPassword: "",
-    });
+  const [success, setSuccess] = useState("");
 
 
-    function handleChange(event) {
-        const {
-            name,
+  function handleChange(event) {
+    const { name, value } = event.target;
 
 
-            value,
-        } = event.target;
+    setForm((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+  }
 
 
-        setForm((previous) => ({
-            ...previous,
+  async function handleSubmit(event) {
+    event.preventDefault();
 
 
-            [name]: value,
-        }));
+    /*
+    -----------------------------------------
+    CLIENT VALIDATION
+    -----------------------------------------
+    */
+
+
+    setError("");
+    setSuccess("");
+
+
+    if (!form.name.trim() || !form.email.trim() || !form.password.trim()) {
+      setError("All fields are required.");
+
+
+      return;
     }
 
 
-    function handleSubmit(event) {
-        event.preventDefault();
+    /*
+    -----------------------------------------
+    PREVENT DUPLICATE SUBMITS
+    -----------------------------------------
+    */
 
 
-        /*
-        Sprint 2:
-        Replace with registration API.
-        */
+    if (loading) return;
 
 
-        console.log(
-            "Signup Form:",
+    try {
+      setLoading(true);
 
 
-            form,
-        );
+      const response = await registerUser(form);
 
 
+      /*
+      Expected Backend Response
+
+
+      {
+        success: true,
+        message: "User registered successfully"
+      }
+      */
+
+
+      setSuccess(response.message || "Registration successful.");
+
+
+      /*
+      -----------------------------------------
+      REDIRECT TO LOGIN
+      -----------------------------------------
+      */
+
+
+      setTimeout(() => {
         navigate("/login");
+      }, 1500);
+    } catch (error) {
+      setError(error.message || "Registration failed.");
+    } finally {
+      setLoading(false);
     }
+  }
 
 
-    return (
-        <section style={styles.container}>
-            <h1>Create Account</h1>
+  return (
+    <section style={styles.container}>
+      <h1>Create Account</h1>
 
 
-            <form onSubmit={handleSubmit} style={styles.form}>
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Full Name"
-                    value={form.name}
-                    onChange={handleChange}
-                    required
-                />
+      <p style={styles.subtitle}>Join BookMyShow and start booking tickets.</p>
 
 
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    value={form.email}
-                    onChange={handleChange}
-                    required
-                />
+      {error && <div style={styles.error}>{error}</div>}
 
 
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    value={form.password}
-                    onChange={handleChange}
-                    required
-                />
+      {success && <div style={styles.success}>{success}</div>}
 
 
-                <input
-                    type="password"
-                    name="confirmPassword"
-                    placeholder="Confirm Password"
-                    value={form.confirmPassword}
-                    onChange={handleChange}
-                    required
-                />
+      <form onSubmit={handleSubmit} style={styles.form}>
+        <input
+          type="text"
+          name="name"
+          placeholder="Full Name"
+          value={form.name}
+          onChange={handleChange}
+          disabled={loading}
+          required
+        />
 
 
-                <button type="submit">Signup</button>
-            </form>
+        <input
+          type="email"
+          name="email"
+          placeholder="Email Address"
+          value={form.email}
+          onChange={handleChange}
+          disabled={loading}
+          required
+        />
 
 
-            <p>
-                Already have an account? <Link to="/login">Login</Link>
-            </p>
-        </section>
-    );
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={form.password}
+          onChange={handleChange}
+          disabled={loading}
+          required
+        />
+
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Creating Account..." : "Signup"}
+        </button>
+      </form>
+
+
+      <p style={styles.footer}>
+        Already have an account? <Link to="/login">Login</Link>
+      </p>
+    </section>
+  );
 }
 
 
 const styles = {
-    container: {
-        maxWidth: "450px",
+  container: {
+    maxWidth: "450px",
 
 
-        margin: "40px auto",
-    },
+    margin: "40px auto",
 
 
-    form: {
-        display: "flex",
+    background: "#fff",
 
 
-        flexDirection: "column",
+    padding: "30px",
 
 
-        gap: "15px",
+    borderRadius: "8px",
 
 
-        marginTop: "20px",
-    },
+    border: "1px solid #ddd",
+  },
+
+
+  subtitle: {
+    marginTop: "10px",
+
+
+    color: "#666",
+  },
+
+
+  form: {
+    display: "flex",
+
+
+    flexDirection: "column",
+
+
+    gap: "15px",
+
+
+    marginTop: "25px",
+  },
+
+
+  error: {
+    marginTop: "20px",
+
+
+    padding: "12px",
+
+
+    background: "#ffebee",
+
+
+    color: "#c62828",
+
+
+    borderRadius: "4px",
+  },
+
+
+  success: {
+    marginTop: "20px",
+
+
+    padding: "12px",
+
+
+    background: "#e8f5e9",
+
+
+    color: "#2e7d32",
+
+
+    borderRadius: "4px",
+  },
+
+
+  footer: {
+    marginTop: "20px",
+  },
 };
 
 
 /*
 =========================================================
-KEY TAKEAWAYS
+USER FLOW
 
 
-1. Controlled components simplify
-   form handling.
+Signup Page
+↓
+Fill Form
+↓
+Submit
+↓
+registerUser()
+↓
+Backend Validation
 
 
-2. Signup and Login share
-   similar patterns.
+Success
+↓
+Show Message
+↓
+Redirect Login
 
 
-3. Sprint 2 introduces OTP-based
-   registration.
+Failure
+↓
+Display Backend Error
+
+
+=========================================================
+
+
+VERIFICATION
+
+
+✓ Controlled inputs
+
+
+✓ Uses registerUser()
+
+
+✓ Prevents duplicate submissions
+
+
+✓ Loading state implemented
+
+
+✓ Backend errors preserved
+
+
+✓ Success feedback shown
+
+
+✓ Redirects to login
+
+
+✓ OTP UI removed
+
+
+✓ Production-oriented MVP
 
 
 =========================================================
