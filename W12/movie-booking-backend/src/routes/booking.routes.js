@@ -1,0 +1,13 @@
+// MERN_Stu_FebMay26Mys\W9\D0\movie-booking-backend\src\routes\booking.routes.js
+const express = require("express");
+const router = express.Router();
+
+const bookingController = require("../controllers/booking.controller");
+const { protect } = require("../middleware/auth.middleware");
+
+// User routes
+router.post("/", protect, bookingController.createBooking);
+router.get("/my", protect, bookingController.getMyBookings);
+router.delete("/:id", protect, bookingController.cancelBooking);
+
+module.exports = router;
