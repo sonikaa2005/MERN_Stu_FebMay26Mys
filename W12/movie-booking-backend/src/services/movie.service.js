@@ -32,7 +32,10 @@ exports.getMovies = async (query) => {
   }
 
   if (search) {
-    filter.$text = { $search: search };
+    filter.title = {
+      $regex: search,
+      $options: "i",
+    };
   }
 
   let mongoQuery = Movie.find(filter);
@@ -71,7 +74,7 @@ exports.updateMovie = async (id, data) => {
     runValidators: true,
   });
 
-  if (!movie) throw new CustomError("Movie not found",404);
+  if (!movie) throw new CustomError("Movie not found", 404);
 
   return movie;
 };
@@ -86,5 +89,5 @@ exports.deleteMovie = async (id) => {
     isActive: false,
   });
 
-  if (!movie) throw new CustomError("Movie not found",404);
+  if (!movie) throw new CustomError("Movie not found", 404);
 };
