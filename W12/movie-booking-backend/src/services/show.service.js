@@ -92,16 +92,77 @@
   UPDATE SHOW
   -----------------------------------------
   */
-  exports.updateShow = async (id, data) => {
-    const show = await Show.findByIdAndUpdate(id, data, {
-      returnDocument: "after",
-      runValidators: true,
-    });
+    exports.updateShow = async (id, updateData) => {
+      const show = await Show.findById(id);
 
-    if (!show) throw new CustomError("Show not found",404);
 
-    return show;
-  };
+      if (!show) {
+        throw new CustomError(
+          "Show not found",
+          404,
+        );
+      }
+
+
+      /*
+      -----------------------------------------
+      RECALCULATE AVAILABLE SEATS
+      -----------------------------------------
+
+
+      Example
+
+
+      Total = 50
+      Available = 20
+
+
+      Booked = 30
+
+
+      Admin changes total = 100
+
+
+      Available becomes:
+
+
+      100 - 30
+      =
+      70
+
+
+      -----------------------------------------
+      */
+
+
+      if (
+        updateData.totalSeats &&
+        updateData.totalSeats !== show.totalSeats
+      ) {
+        const bookedSeats =
+          show.totalSeats -
+          show.availableSeats;
+
+
+        updateData.availableSeats =
+          updateData.totalSeats -
+          bookedSeats;
+      }
+
+
+      const updatedShow =
+        await Show.findByIdAndUpdate(
+          id,
+          updateData,
+          {
+            new: true,
+            runValidators: true,
+          },
+        );
+
+
+      return updatedShow;
+    };
 
   /*
   -----------------------------------------
