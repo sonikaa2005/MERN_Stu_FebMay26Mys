@@ -41,6 +41,8 @@ const authRoutes = require("./src/routes/auth.routes");
 const movieRoutes = require("./src/routes/movie.routes");
 const bookingRoutes = require("./src/routes/booking.routes");
 const showRoutes = require("./src/routes/show.routes");
+const adminRoutes = require("./src/routes/admin.routes");
+
 
 const morgan = require("morgan");
 
@@ -105,6 +107,8 @@ app.use("/api/movies", movieRoutes);
 app.use("/api/bookings", bookingRoutes);
 
 app.use("/api/shows", showRoutes);
+
+app.use("/api/admin", adminRoutes);
 
 /*
 -----------------------------------------
