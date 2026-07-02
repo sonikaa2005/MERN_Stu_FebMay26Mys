@@ -1,60 +1,99 @@
-// src\services\booking.service.js
+// src/services/booking.service.js
+
+
 const Booking = require("../models/Booking");
 const Show = require("../models/Show");
 const CustomError = require("../utils/customError");
+
 
 /*
 -----------------------------------------
 CREATE BOOKING
 -----------------------------------------
 */
-exports.createBooking = async (userId, { showId, seats }) => {
-  // 1. Get show
+exports.createBooking = async (userId, { showId, selectedSeats }) => {
+  /*
+  -----------------------------------------
+  VALIDATE SHOW
+  -----------------------------------------
+  */
+
+
   const show = await Show.findById(showId);
 
-  if (!show) //throw new Error("Show not found");
-  throw new CustomError("Show not found", 404);
 
-
-  // 2. Validate seats
-  const selectedSeats = show.seats.filter((seat) =>
-    seats.includes(seat.seatNumber)
-  );
-
-  if (selectedSeats.length !== seats.length) {
-    throw new CustomError("Some seats do not exist", 400);
+  if (!show) {
+    throw new CustomError("Show not found", 404);
   }
 
-  // 3. Check if already booked
-  for (let seat of selectedSeats) {
-    if (seat.isBooked) {
-      throw new CustomError(`Seat ${seat.seatNumber} is already booked`,409);
+
+  /*
+  -----------------------------------------
+  VALIDATE SEATS
+  -----------------------------------------
+  */
+
+
+  const unavailableSeats = [];
+
+
+  for (const seatNumber of selectedSeats) {
+    const seat = show.seats.find((seat) => seat.seatNumber === seatNumber);
+
+
+    if (!seat || seat.isBooked) {
+      unavailableSeats.push(seatNumber);
     }
   }
 
-  // 4. Mark seats as booked
-  show.seats = show.seats.map((seat) => {
-    if (seats.includes(seat.seatNumber)) {
+
+  if (unavailableSeats.length > 0) {
+    throw new CustomError(
+      `Seats unavailable: ${unavailableSeats.join(", ")}`,
+      400,
+    );
+  }
+
+
+  /*
+  -----------------------------------------
+  BOOK SEATS
+  -----------------------------------------
+  */
+
+
+  show.seats.forEach((seat) => {
+    if (selectedSeats.includes(seat.seatNumber)) {
       seat.isBooked = true;
     }
-    return seat;
   });
 
-  // 5. Update available seats
-  show.availableSeats -= seats.length;
+
+  show.availableSeats -= selectedSeats.length;
+
 
   await show.save();
 
-  // 6. Create booking
+
+  /*
+  -----------------------------------------
+  CREATE BOOKING
+  -----------------------------------------
+  */
+
+
   const booking = await Booking.create({
     userId,
     showId,
-    seats,
-    totalSeats: seats.length,
+    seats: selectedSeats,
+    totalSeats: selectedSeats.length,
+    status: "booked",
   });
+
 
   return booking;
 };
+
 
 /*
 -----------------------------------------
@@ -62,42 +101,36 @@ GET USER BOOKINGS
 -----------------------------------------
 */
 exports.getUserBookings = async (userId) => {
-  const bookings = await Booking.find({
+  return await Booking.find({
     userId,
-    status: "booked",
   })
     .populate({
       path: "showId",
-      select: "date time availableSeats movieId",
       populate: {
         path: "movieId",
-        select: "title genre",
       },
     })
     .sort("-createdAt");
-
-  // Transform response
-  return bookings.map((booking) => ({
-    bookingId: booking._id,
-    seats: booking.seats,
-    totalSeats: booking.totalSeats,
-    status: booking.status,
-    bookingTime: booking.bookingTime,
-
-    show: {
-      id: booking.showId._id,
-      date: booking.showId.date,
-      time: booking.showId.time,
-      availableSeats: booking.showId.availableSeats,
-    },
-
-    movie: {
-      id: booking.showId.movieId._id,
-      title: booking.showId.movieId.title,
-      genre: booking.showId.movieId.genre,
-    },
-  }));
 };
+
+
+/*
+-----------------------------------------
+GET ALL BOOKINGS (ADMIN)
+-----------------------------------------
+*/
+exports.getAllBookings = async () => {
+  return await Booking.find()
+    .populate("userId", "name email role")
+    .populate({
+      path: "showId",
+      populate: {
+        path: "movieId",
+      },
+    })
+    .sort("-createdAt");
+};
+
 
 /*
 -----------------------------------------
@@ -107,33 +140,69 @@ CANCEL BOOKING
 exports.cancelBooking = async (bookingId, userId) => {
   const booking = await Booking.findById(bookingId);
 
-  if (!booking) throw new CustomError("Booking not found",404);
 
-  if (booking.userId.toString() !== userId.toString()) {
-    throw new CustomError("Unauthorized",401);
+  if (!booking) {
+    throw new CustomError("Booking not found", 404);
   }
+
+
+  /*
+  -----------------------------------------
+  OWNERSHIP CHECK
+  -----------------------------------------
+  */
+
+
+  if (booking.userId.toString() !== userId) {
+    throw new CustomError("Unauthorized cancellation", 403);
+  }
+
 
   if (booking.status === "cancelled") {
-    throw new CustomError("Already cancelled",409);
+    throw new CustomError("Booking already cancelled", 400);
   }
 
-  // 1. Get show
+
+  /*
+  -----------------------------------------
+  RESTORE SEATS
+  -----------------------------------------
+  */
+
+
   const show = await Show.findById(booking.showId);
 
-  // 2. Release seats
-  show.seats = show.seats.map((seat) => {
+
+  if (!show) {
+    throw new CustomError("Show not found", 404);
+  }
+
+
+  show.seats.forEach((seat) => {
     if (booking.seats.includes(seat.seatNumber)) {
       seat.isBooked = false;
     }
-    return seat;
   });
 
-  // 3. Update available seats
+
   show.availableSeats += booking.seats.length;
+
 
   await show.save();
 
-  // 4. Update booking
+
+  /*
+  -----------------------------------------
+  UPDATE BOOKING
+  -----------------------------------------
+  */
+
+
   booking.status = "cancelled";
+
+
   await booking.save();
+
+
+  return booking;
 };

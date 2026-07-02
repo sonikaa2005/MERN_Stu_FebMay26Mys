@@ -1,4 +1,8 @@
+// src/controllers/booking.controller.js
+
+
 const bookingService = require("../services/booking.service");
+
 
 /*
 -----------------------------------------
@@ -12,15 +16,17 @@ exports.createBooking = async (req, res, next) => {
       req.body
     );
 
+
     res.status(201).json({
       success: true,
-      message: "Booking confirmed",
+      message: "Booking created successfully",
       data: booking,
     });
   } catch (error) {
     next(error);
   }
 };
+
 
 /*
 -----------------------------------------
@@ -29,7 +35,10 @@ GET MY BOOKINGS
 */
 exports.getMyBookings = async (req, res, next) => {
   try {
-    const bookings = await bookingService.getUserBookings(req.user._id);
+    const bookings = await bookingService.getUserBookings(
+      req.user._id
+    );
+
 
     res.status(200).json({
       success: true,
@@ -40,6 +49,27 @@ exports.getMyBookings = async (req, res, next) => {
   }
 };
 
+
+/*
+-----------------------------------------
+GET ALL BOOKINGS (ADMIN)
+-----------------------------------------
+*/
+exports.getAllBookings = async (req, res, next) => {
+  try {
+    const bookings = await bookingService.getAllBookings();
+
+
+    res.status(200).json({
+      success: true,
+      data: bookings,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
 /*
 -----------------------------------------
 CANCEL BOOKING
@@ -47,11 +77,16 @@ CANCEL BOOKING
 */
 exports.cancelBooking = async (req, res, next) => {
   try {
-    await bookingService.cancelBooking(req.params.id, req.user._id);
+    const booking = await bookingService.cancelBooking(
+      req.params.id,
+      req.user._id.toString()
+    );
+
 
     res.status(200).json({
       success: true,
-      message: "Booking cancelled",
+      message: "Booking cancelled successfully",
+      data: booking,
     });
   } catch (error) {
     next(error);
